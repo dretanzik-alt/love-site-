@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для тебя ❤️</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+  background: linear-gradient(145deg, #101b40, #654477, #c16e9c);
+}
+
+#snow {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.card {
+  position: relative;
+  z-index: 2;
+  width: 90%;
+  max-width: 430px;
+  max-height: 80vh;
+  overflow-y: auto;
+  text-align: center;
+  padding: 30px 20px;
+  border-radius: 28px;
+  background: rgba(255,255,255,.13);
+  border: 1px solid rgba(255,255,255,.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 45px #e8b5ff35;
+}
+
+.emoji {
+  font-size: 68px;
+  margin-bottom: 12px;
+  animation: pulse 1.4s infinite;
+}
+
+h1 {
+  font-size: clamp(27px, 7vw, 36px);
+  margin: 10px 0;
+  text-shadow: 0 0 18px #ffc3e1;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #ffeaf5;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+button {
+  border: 0;
+  border-radius: 50px;
+  padding: 13px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #a13e70;
+  background: #fff0f7;
+  box-shadow: 0 0 18px #ffc4e550;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+button:active {
+  transform: scale(.94);
+}
+
+.yes {
+  background: #ffdaec;
+}
+
+#celebration {
+  display: none;
+}
+
+#flying {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 8;
+}
+
+.floater {
+  position: absolute;
+  bottom: -60px;
+  animation: fly 4s linear forwards;
+}
+
+.falling-yes {
+  position: fixed;
+  z-index: 10;
+  padding: 10px 17px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.13); }
+}
+
+@keyframes fly {
+  to {
+    transform: translateY(-120vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="snow"></canvas>
+<div id="flying"></div>
+
+<main class="card">
+  <section id="question">
+    <div class="emoji" id="face">🥺</div>
+    <h1 id="title">Ты меня любишь?</h1>
+    <p id="message">Только честно... ❤️</p>
+
+    <div class="buttons" id="buttons">
+      <button class="yes" onclick="firstYes()">Да ❤️</button>
+      <button onclick="sayNo()">Нет 😈</button>
+    </div>
+  </section>
+
+  <section id="celebration">
+    <div class="emoji">😻</div>
+    <h1>Я тебя тоже!</h1>
+    <p>
+      Ты даже не представляешь,<br>
+      как много ты для меня значишь ❤️
+    </p>
+    <div style="font-size:36px">💗💕💖💞💗</div>
+  </section>
+</main>
+
+<script>
+// ❄️ СНЕГ НА ВСЁМ САЙТЕ
+const canvas = document.getElementById("snow");
+const ctx = canvas.getContext("2d");
+let flakes = [];
+
+function resize() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  canvas.width = innerWidth * dpr;
+  canvas.height = innerHeight * dpr;
+  canvas.style.width = innerWidth + "px";
+  canvas.style.height = innerHeight + "px";
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  flakes = Array.from({length: 120}, () => ({
+    x: Math.random() * innerWidth,
+    y: Math.random() * innerHeight,
+    r: Math.random() * 3 + 1,
+    v: Math.random() * 1.5 + .4,
+    drift: Math.random() * .8 - .4
+  }));
+}
+
+function snow() {
+  ctx.clearRect(0, 0, innerWidth, innerHeight);
+  ctx.fillStyle = "rgba(255,255,255,.9)";
+
+  for (const f of flakes) {
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    f.y += f.v;
+    f.x += f.drift;
+
+    if (f.y > innerHeight) {
+      f.y = -5;
+      f.x = Math.random() * innerWidth;
+    }
+
+    if (f.x > innerWidth) f.x = 0;
+    if (f.x < 0) f.x = innerWidth;
+  }
+
+  requestAnimationFrame(snow);
+}
+
+window.addEventListener("resize", resize);
+resize();
+snow();
+
+// 💗 ОТВЕТ «ДА»
+function firstYes() {
+  clearFalling();
+
+  document.getElementById("face").textContent = "🥹💗";
+  document.getElementById("title").textContent =
+    "Ты точно меня любишь?";
+  document.getElementById("message").textContent =
+    "Правда-правда? 🥺❤️";
+
+  document.getElementById("buttons").innerHTML = `
+    <button class="yes" onclick="finish()">Да 💖</button>
+    <button class="yes" onclick="finish()">Да 💗</button>
+  `;
+}
+
+// 😡 ОТВЕТ «НЕТ»
+let fallTimers = [];
+
+function clearFalling() {
+  fallTimers.forEach(clearTimeout);
+  fallTimers = [];
+
+  document.querySelectorAll(".falling-yes").forEach(b => {
+    if (b._fallAnimation) b._fallAnimation.cancel();
+    b.remove();
+  });
+}
+
+function sayNo() {
+  clearFalling();
+
+  document.getElementById("face").textContent = "😡";
+  document.getElementById("title").textContent =
+    "Я обиделся! 😤";
+  document.getElementById("message").textContent =
+    "Ну вот... 💔 А я надеялся на другое!";
+
+  document.getElementById("buttons").innerHTML = "";
+
+  fallTimers.push(setTimeout(() => {
+    document.getElementById("face").textContent = "🥺";
+    document.getElementById("title").textContent =
+      "Ну пожалуйста! 🥹";
+    document.getElementById("message").textContent =
+      "Лови мои ДА ❤️";
+
+    // 🌨️ ДОЖДЬ ИЗ ПАДАЮЩИХ КНОПОК
+    for (let i = 0; i < 35; i++) {
+      const timer = setTimeout(() => {
+        const b = document.createElement("button");
+
+        b.className = "falling-yes";
+        b.textContent = ["ДА ❤️", "ДАА 💗", "ДА! 💖"][i % 3];
+
+        const maxLeft = Math.max(0, innerWidth - 100);
+        b.style.left = Math.random() * maxLeft + "px";
+        b.style.top = "-65px";
+
+        document.body.appendChild(b);
+
+        const duration = 3000 + Math.random() * 3000;
+
+        b._fallAnimation = b.animate([
+          {
+            top: "-65px",
+            transform: "rotate(0deg)"
+          },
+          {
+            top: (innerHeight + 80) + "px",
+            transform: `rotate(${Math.random() * 500 - 250}deg)`
+          }
+        ], {
+          duration,
+          delay: Math.random() * 500,
+          easing: "ease-in",
+          fill: "forwards"
+        });
+
+        b.onclick = firstYes;
+
+        b._fallAnimation.onfinish = () => b.remove();
+      }, i * 110);
+
+      fallTimers.push(timer);
+    }
+  }, 1600));
+}
+
+// 💖 ФИНАЛ С КОТИКОМ И СЕРДЕЧКАМИ
+function finish() {
+  clearFalling();
+
+  document.getElementById("question").style.display = "none";
+  document.getElementById("celebration").style.display = "block";
+
+  for (let i = 0; i < 70; i++) {
+    setTimeout(() => {
+      const heart = document.createElement("span");
+
+      heart.className = "floater";
+      heart.textContent =
+        ["❤️", "💖", "💕", "💗", "💞", "❄️"][
+          Math.floor(Math.random() * 6)
+        ];
+
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = 20 + Math.random() * 26 + "px";
+      heart.style.animationDuration =
+        3 + Math.random() * 3 + "s";
+
+      document.getElementById("flying").appendChild(heart);
+
+      heart.addEventListener("animationend", () => heart.remove());
+    }, i * 65);
+  }
+}
+</script>
+
+</body>
+</html>
