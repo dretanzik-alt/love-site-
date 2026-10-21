@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Для тебя ❤️</title>
+<title>Для Насти ❤️</title>
 
 <style>
 * {
@@ -122,7 +122,9 @@ button:active {
 }
 
 @keyframes pulse {
-  50% { transform: scale(1.13); }
+  50% {
+    transform: scale(1.13);
+  }
 }
 
 @keyframes fly {
@@ -140,9 +142,12 @@ button:active {
 <div id="flying"></div>
 
 <main class="card">
+
   <section id="question">
     <div class="emoji" id="face">🥺</div>
-    <h1 id="title">Ты меня любишь?</h1>
+
+    <h1 id="title">Настя, ты меня любишь?</h1>
+
     <p id="message">Только честно... ❤️</p>
 
     <div class="buttons" id="buttons">
@@ -153,13 +158,17 @@ button:active {
 
   <section id="celebration">
     <div class="emoji">😻</div>
-    <h1>Я тебя тоже!</h1>
+
+    <h1>Я тебя тоже, Настя! 💖</h1>
+
     <p>
       Ты даже не представляешь,<br>
       как много ты для меня значишь ❤️
     </p>
+
     <div style="font-size:36px">💗💕💖💞💗</div>
   </section>
+
 </main>
 
 <script>
@@ -220,8 +229,10 @@ function firstYes() {
   clearFalling();
 
   document.getElementById("face").textContent = "🥹💗";
+
   document.getElementById("title").textContent =
-    "Ты точно меня любишь?";
+    "Настя, ты точно меня любишь?";
+
   document.getElementById("message").textContent =
     "Правда-правда? 🥺❤️";
 
@@ -248,8 +259,10 @@ function sayNo() {
   clearFalling();
 
   document.getElementById("face").textContent = "😡";
+
   document.getElementById("title").textContent =
-    "Я обиделся! 😤";
+    "Настя, я обиделся! 😤";
+
   document.getElementById("message").textContent =
     "Ну вот... 💔 А я надеялся на другое!";
 
@@ -257,8 +270,10 @@ function sayNo() {
 
   fallTimers.push(setTimeout(() => {
     document.getElementById("face").textContent = "🥺";
+
     document.getElementById("title").textContent =
-      "Ну пожалуйста! 🥹";
+      "Ну пожалуйста, Настя! 🥹";
+
     document.getElementById("message").textContent =
       "Лови мои ДА ❤️";
 
@@ -302,9 +317,10 @@ function sayNo() {
       fallTimers.push(timer);
     }
   }, 1600));
+
 }
 
-// 💖 ФИНАЛ С КОТИКОМ И СЕРДЕЧКАМИ
+// 💖 ФИНАЛ ДЛЯ НАСТИ С КОТИКОМ И СЕРДЕЧКАМИ
 function finish() {
   clearFalling();
 
@@ -316,6 +332,7 @@ function finish() {
       const heart = document.createElement("span");
 
       heart.className = "floater";
+
       heart.textContent =
         ["❤️", "💖", "💕", "💗", "💞", "❄️"][
           Math.floor(Math.random() * 6)
